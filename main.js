@@ -13,50 +13,62 @@ class RingList {
     }
 
     size() {
-
+        return this.length;
     }
 
     append() {
-
+        const node = new Node(data);
+        if (!this.head) {
+            this.head = node;
+        } else {
+            this.tail.next = node;
+        }
+        node.next = this.head;
+        this.tail = node;
+        this.length++;
     }
 
-    insert() {
-
+    insert(data, index) {
+        if (index < 0 || index > this.length) {
+            return false;
+        }
+        const node = new Node(data);
+        if (index === 0) {
+            node.next = this.head;
+            this.head = node;
+            this.tail = node;
+        } else if (index === this.length) {
+            this.tail.next = node;
+            this.tail = node;
+            node.next = this.head;
+        } else {
+            let current = this.head;
+            let i = 0;
+            while (i < index - 1) {
+                current = current.next;
+                i++;
+            }
+            node.next = current.next;
+            current.next = node;
+        }
+        this.length++;
     }
 
-    delete() {
+    delete() {}
 
-    }
+    deleteAll() {}
 
-    deleteAll() {
+    get() {}
 
-    }
+    clone() {}
 
-    get() {
+    reverse() {}
 
-    }
+    findFirst() {}
 
-    clone() {
+    findLast() {}
 
-    }
+    clear() {}
 
-    reverse() {
-
-    }
-
-    findFirst() {
-
-    }
-
-    findLast() {
-
-    }
-
-    clear() {
-
-    }
-
-    extend() {
-
-    }
+    extend() {}
 }
