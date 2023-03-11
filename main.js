@@ -54,9 +54,61 @@ class RingList {
         this.length++;
     }
 
-    delete() {}
+    delete(index) {
+        if (index < 0 || index >= this.length) {
+            return null;
+        }
+        let deletedItem = null;
+        if (this.length === 1) {
+            deletedItem = this.head.data;
+            this.head = null;
+            this.tail = null;
+        } else if (index === 0) {
+            deletedItem = this.head.data;
+            this.head = this.head.next;
+            this.tail.next = this.head;
+        } else {
+            let current = this.head;
+            let i = 0;
+            while (i < index - 1) {
+                current = current.next;
+                i++;
+            }
+            deletedItem = current.next.data;
+            current.next = current.next.next;
+            if (index === this.length - 1) {
+                this.tail = current;
+            }
+        }
+        this.length--;
+        return deletedItem;
+    }
 
-    deleteAll() {}
+    deleteAll(data) {
+        let current = this.head;
+        let prev = this.tail;
+        let i = 0;
+        while (i < this.length) {
+            if (current.data === data) {
+                if (i === 0) {
+                    this.head = this.head.next;
+                    this.tail.next = this.head;
+                    prev = this.tail;
+                } else {
+                    prev.next = current.next;
+                    if (i === this.length - 1) {
+                        this.tail = prev;
+                    }
+                }
+                this.length--;
+                i--;
+            } else {
+                prev = current;
+            }
+            current = current.next;
+            i++;
+        }
+    }
 
     get() {}
 
