@@ -110,9 +110,30 @@ class RingList {
         }
     }
 
-    get() {}
+    get(index) {
+        if (index < 0 || index >= this.length) {
+            return null;
+        }
+        let current = this.head;
+        let i = 0;
+        while (i < index) {
+            current = current.next;
+            i++;
+        }
+        return current.data;
+    }
 
-    clone() {}
+    clone() {
+        const newList = new RingList();
+        let current = this.head;
+        let i = 0;
+        while (i < this.length) {
+            newList.append(current.data);
+            current = current.next;
+            i++;
+        }
+        return newList;
+    }
 
     reverse() {}
 
