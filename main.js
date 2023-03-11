@@ -135,11 +135,47 @@ class RingList {
         return newList;
     }
 
-    reverse() {}
+    reverse() {
+        let current = this.head;
+        let prev = this.tail;
+        let i = 0;
+        while (i < this.length) {
+            const next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+            i++;
+        }
+        this.head = prev;
+        this.tail = this.head.next;
+    }
 
-    findFirst() {}
+    findFirst(data) {
+        let current = this.head;
+        let i = 0;
+        while (i < this.length) {
+            if (current.data === data) {
+                return i;
+            }
+            current = current.next;
+            i++;
+        }
+        return -1;
+    }
 
-    findLast() {}
+    findLast(data) {
+        let current = this.head;
+        let i = 0;
+        let lastIndex = -1;
+        while (i < this.length) {
+            if (current.data === data) {
+                lastIndex = i;
+            }
+            current = current.next;
+            i++;
+        }
+        return lastIndex;
+    }
 
     clear() {}
 
