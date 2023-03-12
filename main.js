@@ -1,209 +1,92 @@
-class Node {
-    constructor(data) {
-        this.data = data;
-        this.next = null;
-    }
-}
-
-class RingList {
+class List {
     constructor() {
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
+        this.list = [];
     }
 
     size() {
-        return this.length;
+        return this.list.length;
     }
 
     append(data) {
-        const isString = typeof data === 'string';
-        if (isString && data.length === 1) {
-            const node = new Node(data);
-            if (!this.head) {
-                this.head = node;
-            } else {
-                this.tail.next = node;
-            }
-            node.next = this.head;
-            this.tail = node;
-            this.length++;
-        } else {
-            console.log('Error. Wrong input data type, expected type char.');
+        const isString = typeof data;
+
+        if (data && isString && data.length === 1) {
+            this.list.push(data);
         }
     }
 
     insert(data, index) {
-        const isString = typeof data === 'string';
-        if (isString && data.length === 1) {
-            if (index < 0 || index > this.length) {
-                return false;
+        const isString = typeof data;
+
+        if (data && isString && data.length === 1) {
+            if (index < 0 || index > this.list.length) {
+                return 'Error. Index out of range.';
             }
-            const node = new Node(data);
-            if (index === 0) {
-                node.next = this.head;
-                this.head = node;
-                this.tail = node;
-            } else if (index === this.length) {
-                this.tail.next = node;
-                this.tail = node;
-                node.next = this.head;
-            } else {
-                let current = this.head;
-                let i = 0;
-                while (i < index - 1) {
-                    current = current.next;
-                    i++;
-                }
-                node.next = current.next;
-                current.next = node;
-            }
-            this.length++;
-        } else {
-            console.log('Error. Wrong input data type, expected type char.');
+            this.list.splice(index, 0, data);
         }
     }
 
     delete(index) {
-        if (index < 0 || index >= this.length) {
+        if (index < 0 || index >= this.list.length) {
             return 'Error. Index out of range.';
         }
-        let deletedItem = null;
-        if (this.length === 1) {
-            deletedItem = this.head.data;
-            this.head = null;
-            this.tail = null;
-        } else if (index === 0) {
-            deletedItem = this.head.data;
-            this.head = this.head.next;
-            this.tail.next = this.head;
-        } else {
-            let current = this.head;
-            let i = 0;
-            while (i < index - 1) {
-                current = current.next;
-                i++;
-            }
-            deletedItem = current.next.data;
-            current.next = current.next.next;
-            if (index === this.length - 1) {
-                this.tail = current;
-            }
-        }
-        this.length--;
-        return deletedItem;
+        return this.list.splice(index, 1)[0];
     }
 
     deleteAll(data) {
-        let current = this.head;
-        let prev = this.tail;
-        let i = 0;
-        while (i < this.length) {
-            if (current.data === data) {
-                if (i === 0) {
-                    this.head = this.head.next;
-                    this.tail.next = this.head;
-                    prev = this.tail;
-                } else {
-                    prev.next = current.next;
-                    if (i === this.length - 1) {
-                        this.tail = prev;
-                    }
-                }
-                this.length--;
-                i--;
-            } else {
-                prev = current;
-            }
-            current = current.next;
-            i++;
-        }
+        const filteredList = this.list.filter((element) => element !== data);
+        this.list = filteredList;
     }
 
     get(index) {
-        if (index < 0 || index >= this.length) {
+        if (index < 0 || index >= this.list.length) {
             return null;
         }
-        let current = this.head;
-        let i = 0;
-        while (i < index) {
-            current = current.next;
-            i++;
-        }
-        return current.data;
+        return this.list[index];
     }
 
     clone() {
-        const newList = new RingList();
-        let current = this.head;
+        const newList = new List();
         let i = 0;
-        while (i < this.length) {
-            newList.append(current.data);
-            current = current.next;
+        while (i < this.list.length) {
+            newList.append(this.list[i]);
             i++;
         }
         return newList;
     }
 
     reverse() {
-        let current = this.head;
-        let prev = this.tail;
-        let i = 0;
-        while (i < this.length) {
-            const next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-            i++;
-        }
-        this.head = prev;
-        if (this.length > 0) {
-            this.tail = this.head.next;
-        }
+        this.list.reverse();
     }
 
     findFirst(data) {
-        let current = this.head;
-        let i = 0;
-        while (i < this.length) {
-            if (current.data === data) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i] === data) {
                 return i;
             }
-            current = current.next;
-            i++;
         }
         return -1;
     }
 
     findLast(data) {
-        let current = this.head;
-        let i = 0;
-        let lastIndex = -1;
-        while (i < this.length) {
-            if (current.data === data) {
-                lastIndex = i;
+        for (let i = this.list.length - 1; i >= 0; i--) {
+            if (this.list[i] === data) {
+                return i;
             }
-            current = current.next;
-            i++;
         }
-        return lastIndex;
+        return -1;
     }
 
     clear() {
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
+        this.list = [];
     }
 
     extend(list) {
-        let current = list.head;
-        let i = 0;
-        while (i < list.length) {
-            this.append(current.data);
-            current = current.next;
-            i++;
+        for (let i = 0; i < list.size(); i++) {
+            this.list.push(list.get(i));
         }
+        return this.list;
     }
 }
 
-module.exports = RingList;
+module.exports = List;

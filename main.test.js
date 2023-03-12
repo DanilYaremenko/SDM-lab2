@@ -1,10 +1,10 @@
-const RingList = require('./main.js');
+const List = require('./main.js');
 
 describe('size()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should return 0 for an empty list', () => {
@@ -15,7 +15,7 @@ describe('size()', () => {
         list.append('1');
         list.append('2');
         list.append('3');
-        expect(list.size()).toEqual(4);
+        expect(list.size()).toEqual(3);
     });
 
     it('should return 1 for a list with only one element', () => {
@@ -28,30 +28,21 @@ describe('append()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should append a new node to an empty list', () => {
         list.append('1');
-        expect(list.head.data).toBe('1');
-        expect(list.tail.data).toBe('1');
-        expect(list.length).toBe(1);
+        expect(list.get(0)).toBe('1');
+        expect(list.size()).toBe(1);
     });
 
     it('should append a new node to a non-empty list', () => {
         list.append('1');
         list.append('2');
-        expect(list.head.data).toBe('1');
-        expect(list.tail.data).toBe('2');
-        expect(list.length).toBe(2);
-    });
-
-    it('should make the new node point to the head of the list', () => {
-        list.append('1');
-        list.append('2');
-        list.append('3');
-        expect(list.tail.next.data).toBe('1');
-        expect(list.length).toBe(3);
+        expect(list.size()).toBe(2);
+        expect(list.get(0)).toBe('1');
+        expect(list.get(1)).toBe('2');
     });
 
     it('should not append a new node to an empty list with not correct datatype', () => {
@@ -61,7 +52,7 @@ describe('append()', () => {
         list.append(undefined);
         list.append(null);
         list.append({ a: 1 });
-        expect(list.length).toBe(0);
+        expect(list.size()).toBe(0);
     });
 });
 
@@ -69,13 +60,13 @@ describe('insert()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should insert at the beginning of an empty list', () => {
         list.insert('1', 0);
         expect(list.get(0)).toBe('1');
-        expect(list.length).toBe(1);
+        expect(list.size()).toBe(1);
     });
 
     it('should insert at the beginning of a non-empty list', () => {
@@ -83,7 +74,7 @@ describe('insert()', () => {
         list.insert('2', 0);
         expect(list.get(0)).toBe('2');
         expect(list.get(1)).toBe('1');
-        expect(list.length).toBe(2);
+        expect(list.size()).toBe(2);
     });
 
     it('should insert at the end of a non-empty list', () => {
@@ -91,7 +82,7 @@ describe('insert()', () => {
         list.insert('2', 1);
         expect(list.get(0)).toBe('1');
         expect(list.get(1)).toBe('2');
-        expect(list.length).toBe(2);
+        expect(list.size()).toBe(2);
     });
 
     it('should insert in the middle of a non-empty list', () => {
@@ -101,19 +92,19 @@ describe('insert()', () => {
         expect(list.get(0)).toBe('1');
         expect(list.get(1)).toBe('2');
         expect(list.get(2)).toBe('3');
-        expect(list.length).toBe(3);
+        expect(list.size()).toBe(3);
     });
 
     it('should not insert at a negative index', () => {
         list.append('1');
         list.insert('2', -1);
-        expect(list.length).toBe(1);
+        expect(list.size()).toBe(1);
     });
 
     it('should not insert at an index greater than the length of the list', () => {
         list.append('1');
         list.insert('2', 2);
-        expect(list.length).toBe(1);
+        expect(list.size()).toBe(1);
     });
 
     it('should insert in the middle of a non-empty list version 2', () => {
@@ -129,7 +120,7 @@ describe('insert()', () => {
         expect(list.get(3)).toBe('6');
         expect(list.get(4)).toBe('4');
         expect(list.get(5)).toBe('5');
-        expect(list.length).toBe(6);
+        expect(list.size()).toBe(6);
     });
 
     it('should not insert an invalid data type to the begining of the list', () => {
@@ -139,7 +130,7 @@ describe('insert()', () => {
         list.insert(undefined, 0);
         list.insert(null, 0);
         list.insert({ a: 1 }, 0);
-        expect(list.length).toBe(0);
+        expect(list.size()).toBe(0);
     });
 });
 
@@ -147,7 +138,7 @@ describe('delete())', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
         list.append('1');
         list.append('2');
         list.append('3');
@@ -156,7 +147,7 @@ describe('delete())', () => {
     test('should remove the item at the specified index', () => {
         const deleted = list.delete(1);
         expect(deleted).toBe('2');
-        expect(list.length).toBe(2);
+        expect(list.size()).toBe(2);
         expect(list.get(0)).toBe('1');
         expect(list.get(1)).toBe('3');
     });
@@ -164,7 +155,7 @@ describe('delete())', () => {
     test('should remove the first item', () => {
         const deleted = list.delete(0);
         expect(deleted).toBe('1');
-        expect(list.length).toBe(2);
+        expect(list.size()).toBe(2);
         expect(list.get(0)).toBe('2');
         expect(list.get(1)).toBe('3');
     });
@@ -172,14 +163,14 @@ describe('delete())', () => {
     test('should remove the last item', () => {
         const deleted = list.delete(2);
         expect(deleted).toBe('3');
-        expect(list.length).toBe(2);
+        expect(list.size()).toBe(2);
         expect(list.get(0)).toBe('1');
         expect(list.get(1)).toBe('2');
     });
 
     test('should return error if index is out of range', () => {
         const deleted = list.delete(3);
-        expect(list.length).toBe(3);
+        expect(list.size()).toBe(3);
         expect(deleted).toBe('Error. Index out of range.');
     });
 
@@ -187,7 +178,7 @@ describe('delete())', () => {
         list.delete(2);
         list.delete(1);
         list.delete(0);
-        expect(list.length).toBe(0);
+        expect(list.size()).toBe(0);
         expect(list.get(0)).toBeNull();
     });
 });
@@ -196,7 +187,7 @@ describe('deleteAll', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should remove all nodes with matching data', () => {
@@ -209,7 +200,7 @@ describe('deleteAll', () => {
 
         list.deleteAll('1');
 
-        expect(list.length).toBe(3);
+        expect(list.size()).toBe(3);
         expect(list.get(0)).toBe('2');
         expect(list.get(1)).toBe('3');
         expect(list.get(2)).toBe('4');
@@ -220,7 +211,7 @@ describe('deleteAll', () => {
 
         list.deleteAll('1');
 
-        expect(list.length).toBe(0);
+        expect(list.size()).toBe(0);
         expect(list.get(0)).toBe(null);
     });
 
@@ -249,7 +240,7 @@ describe('get()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
         list.append('1');
         list.append('2');
         list.append('3');
@@ -271,8 +262,8 @@ describe('get()', () => {
 });
 
 describe('clone()', () => {
-    it('should return a new RingList with the same elements', () => {
-        const list = new RingList();
+    it('should return a new list with the same elements', () => {
+        const list = new List();
         list.append('1');
         list.append('2');
         list.append('3');
@@ -283,8 +274,8 @@ describe('clone()', () => {
         expect(clonedList.get(2)).toEqual('3');
     });
 
-    it('should return an independent RingList', () => {
-        const list = new RingList();
+    it('should return an independent list', () => {
+        const list = new List();
         list.append('1');
         list.append('2');
         list.append('3');
@@ -294,8 +285,8 @@ describe('clone()', () => {
         expect(list.size()).toEqual(3);
     });
 
-    it('should return an empty RingList if original is empty', () => {
-        const list = new RingList();
+    it('should return an empty list if original is empty', () => {
+        const list = new List();
         const clonedList = list.clone();
         expect(clonedList.size()).toEqual(0);
     });
@@ -305,7 +296,7 @@ describe('reverse()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should return a reversed list', () => {
@@ -328,7 +319,7 @@ describe('reverse()', () => {
 
     it('should return the same list if it contains nothing', () => {
         list.reverse();
-        expect(list.length).toEqual(0);
+        expect(list.size()).toEqual(0);
     });
 });
 
@@ -336,7 +327,7 @@ describe('findFirst()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should return the index of the first occurrence of a data item', () => {
@@ -369,7 +360,7 @@ describe('findLast()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should return the index of the last occurrence of the element', () => {
@@ -412,7 +403,7 @@ describe('clear()', () => {
     let list;
 
     beforeEach(() => {
-        list = new RingList();
+        list = new List();
     });
 
     it('should remove all elements from the list and reset the length to zero', () => {
@@ -425,32 +416,21 @@ describe('clear()', () => {
         expect(list.get(0)).toBeNull();
     });
 
-    it('should set the head and tail to null after clearing', () => {
-        list.append('1');
-        list.append('2');
-        list.append('3');
-        list.clear();
-        expect(list.head).toBeNull();
-        expect(list.tail).toBeNull();
-    });
-
     it('should work correctly even if the list is already empty', () => {
         expect(list.size()).toBe(0);
         list.clear();
         expect(list.size()).toBe(0);
-        expect(list.head).toBeNull();
-        expect(list.tail).toBeNull();
     });
 });
 
 describe('extend()', () => {
     it('should add all elements from the given list to the end of the current list', () => {
-        const list1 = new RingList();
+        const list1 = new List();
         list1.append('1');
         list1.append('2');
         list1.append('3');
 
-        const list2 = new RingList();
+        const list2 = new List();
         list2.append('4');
         list2.append('5');
         list2.append('6');
@@ -467,12 +447,12 @@ describe('extend()', () => {
     });
 
     it('should do nothing if the given list is empty', () => {
-        const list1 = new RingList();
+        const list1 = new List();
         list1.append('1');
         list1.append('2');
         list1.append('3');
 
-        const list2 = new RingList();
+        const list2 = new List();
 
         list1.extend(list2);
 
@@ -483,12 +463,12 @@ describe('extend()', () => {
     });
 
     it('should not modify the given list', () => {
-        const list1 = new RingList();
+        const list1 = new List();
         list1.append('1');
         list1.append('2');
         list1.append('3');
 
-        const list2 = new RingList();
+        const list2 = new List();
         list2.append('4');
         list2.append('5');
         list2.append('6');
