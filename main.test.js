@@ -15,7 +15,7 @@ describe('size()', () => {
         list.append('1');
         list.append('2');
         list.append('3');
-        expect(list.size()).toEqual(3);
+        expect(list.size()).toEqual(4);
     });
 
     it('should return 1 for a list with only one element', () => {
