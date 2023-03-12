@@ -16,47 +16,57 @@ class RingList {
         return this.length;
     }
 
-    append() {
-        const node = new Node(data);
-        if (!this.head) {
-            this.head = node;
+    append(data) {
+        const isString = typeof data === 'string';
+        if (isString && data.length === 1) {
+            const node = new Node(data);
+            if (!this.head) {
+                this.head = node;
+            } else {
+                this.tail.next = node;
+            }
+            node.next = this.head;
+            this.tail = node;
+            this.length++;
         } else {
-            this.tail.next = node;
+            console.log('Error. Wrong input data type, expected type char.');
         }
-        node.next = this.head;
-        this.tail = node;
-        this.length++;
     }
 
     insert(data, index) {
-        if (index < 0 || index > this.length) {
-            return false;
-        }
-        const node = new Node(data);
-        if (index === 0) {
-            node.next = this.head;
-            this.head = node;
-            this.tail = node;
-        } else if (index === this.length) {
-            this.tail.next = node;
-            this.tail = node;
-            node.next = this.head;
-        } else {
-            let current = this.head;
-            let i = 0;
-            while (i < index - 1) {
-                current = current.next;
-                i++;
+        const isString = typeof data === 'string';
+        if (isString && data.length === 1) {
+            if (index < 0 || index > this.length) {
+                return false;
             }
-            node.next = current.next;
-            current.next = node;
+            const node = new Node(data);
+            if (index === 0) {
+                node.next = this.head;
+                this.head = node;
+                this.tail = node;
+            } else if (index === this.length) {
+                this.tail.next = node;
+                this.tail = node;
+                node.next = this.head;
+            } else {
+                let current = this.head;
+                let i = 0;
+                while (i < index - 1) {
+                    current = current.next;
+                    i++;
+                }
+                node.next = current.next;
+                current.next = node;
+            }
+            this.length++;
+        } else {
+            console.log('Error. Wrong input data type, expected type char.');
         }
-        this.length++;
     }
 
     delete(index) {
         if (index < 0 || index >= this.length) {
-            return null;
+            return 'Error. Index out of range.';
         }
         let deletedItem = null;
         if (this.length === 1) {
