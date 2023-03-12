@@ -177,7 +177,19 @@ class RingList {
         return lastIndex;
     }
 
-    clear() {}
+    clear() {
+        this.head = null;
+        this.tail = null;
+        this.length = 0;
+    }
 
-    extend() {}
+    extend(list) {
+        let current = list.head;
+        let i = 0;
+        while (i < list.length) {
+            this.append(current.data);
+            current = current.next;
+            i++;
+        }
+    }
 }
