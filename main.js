@@ -157,7 +157,9 @@ class RingList {
             i++;
         }
         this.head = prev;
-        this.tail = this.head.next;
+        if (this.length > 0) {
+            this.tail = this.head.next;
+        }
     }
 
     findFirst(data) {
@@ -203,3 +205,5 @@ class RingList {
         }
     }
 }
+
+module.exports = RingList;
